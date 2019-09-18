@@ -1,0 +1,2 @@
+[nxos]
+localhost ansible_network_os=nxos ansible_user=admin ansible_ssh_pass=admin ansible_ssh_port=8022

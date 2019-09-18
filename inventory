@@ -1,0 +1,2 @@
+[eos]
+10.8.38.31 ansible_network_os=eos ansible_user=ansible ansible_ssh_pass=ansible ansible_become=true ansible_become_method=enable ansible_become_pass=admin
