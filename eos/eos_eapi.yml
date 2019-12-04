@@ -1,0 +1,15 @@
+---
+- name: TURN ON HTTPAPI CONNECTION PLUGINS
+  hosts: eos
+  gather_facts: false
+  tasks:
+    - name: Turn on EAPI
+      eos_eapi:
+        vrf: "test"
+
+    #- net_user:
+    #    name: admin
+    #    configured_password: admin
+    #    privilege: 15
+    #  vars:
+    #    ansible_connection: network_cli

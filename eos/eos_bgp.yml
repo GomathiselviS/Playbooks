@@ -1,0 +1,15 @@
+---
+- hosts: eos
+  gather_facts: false
+
+  tasks:
+    - name: Merge given VLAN attributes with device configuration
+      eos_bgp:
+        config:
+          bgp_as: 100
+          router_id: 10.0.0.1
+          log_neighbor_changes: True
+          neighbors:
+            - neighbor: 192.168.0.2
+              remote_as: 101
+        operation: merge

@@ -1,0 +1,168 @@
+---
+- hosts: eos
+  connection: network_cli
+  gather_facts: false
+  tasks:
+      
+  - name: Merge
+    eos_static_routes:
+      config:
+        - address_families:
+            - afi: ipv4
+              routes:
+                - dest: 10.2.2.0/24
+                  next_hops:
+                    - interface: Ethernet1
+                    - interface: 64.1.1.1
+                      mpls_label: 17
+                      admin_distance: 33
+                - dest: "33.33.33.0 255.255.255.0"
+                  next_hops:
+                    - interface: 'Nexthop-Group testgrp'
+            - afi: ipv6
+              routes:
+                - dest:  5222:5::/64
+                  next_hops:
+                    - forward_router_address: "4312:100::1"
+                      interface: "Management1"
+        - vrf: testvrf
+          address_families:
+            - afi: ipv4
+              routes:
+                - dest: 22.65.1.0/24
+                  next_hops:
+                    - interface: "Null0"
+                      description: "testroute"
+                      admin_distance: 90
+            - afi: ipv6
+              routes:
+                - dest: 2222:6::/64
+                  next_hops:
+                    - interface: "Null0"
+                      description: "testroute1"
+                      admin_distance: 90
+
+    tags:
+      - "Merge"
+
+  - name: Del
+    eos_static_routes:
+      state: "deleted"
+    tags:
+      "deletedall"
+
+  - name: Delvrf
+    eos_static_routes:
+      config:
+        - vrf: testvrf
+      state: "deleted"
+    tags:
+      "deletevrf"
+
+
+  - name: Delete default vrf
+    eos_static_routes:
+      config:
+        - address_families:
+      state: "deleted"
+    tags:
+      "deletedefaultvrf"
+
+  - name: Delete afi
+    eos_static_routes:
+      config:
+        - vrf: "testvrf"
+          address_families:
+          - afi: "ipv4"
+      state: "deleted"
+    tags:
+      "deleteafi"
+
+  - name: Delete route
+    eos_static_routes:
+      config:
+        - address_families:
+          - afi: ipv4
+            routes:
+              - dest: 10.2.2.0/24
+      state: "deleted"
+    tags:
+      "deleteroute"
+
+  - name: Delete nexthop
+    eos_static_routes:
+      config:
+        - address_families:
+            - afi: ipv4
+              routes:
+                - dest: 10.2.2.0/24
+                  next_hops:
+                    - interface: 64.1.1.1
+                      mpls_label: 17
+                      admin_distance: 33
+                - dest: "33.33.33.0 255.255.255.0"
+                  next_hops:
+                    - interface: 'Nexthop-Group testgrp'
+      state: "deleted"
+    tags:
+      "deletenexthop"
+
+  - name: Override nexthop
+    eos_static_routes:
+      config:
+        - address_families:
+          - afi: ipv4
+            routes:
+            - dest: 10.2.2.0/24
+              next_hops:
+              - interface: Ethernet1
+            - dest: 33.2.1.0/24
+              next_hops:
+              - interface: Loopback1
+                admin_distance: 200
+      state: "overridden"
+    tags:
+      "override"
+
+  - name: Replace nexthop
+    eos_static_routes:
+      config:
+        - address_families:
+            - afi: ipv4
+              routes:
+                - dest: 10.2.2.0/24
+                  next_hops:
+                    - interface: 12.2.3.1
+                      admin_distance: 9
+      state: "replaced"
+    tags:
+      "replaced"
+
+  - name: Gather
+    eos_static_routes:
+      state: gathered
+    tags:
+      - gathered
+
+  - name: render confgis
+    eos_static_routes:
+      config:
+        - vrf: "vrf1"
+          address_families:
+            - afi: ipv4
+              routes:
+                - dest: 192.2.2.0/24
+                  next_hops:
+                    - interface: 125.2.3.1
+                      admin_distance: 93
+      state: "rendered"
+    tags:
+      "rendered"
+
+  - name: parse configs
+    eos_static_routes:
+      running_config: "{{ lookup('file', './parsed.cfg') }}"
+      state: parsed
+    tags:
+      - parsed
+

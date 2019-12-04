@@ -1,0 +1,14 @@
+---
+- hosts: eos
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+    - name: Merge given VLAN attributes with device configuration
+      eos_linkagg:
+        group: 100
+        state: present
+        min_links: 2
+        mode: active
+        members:
+          - Ethernet1
