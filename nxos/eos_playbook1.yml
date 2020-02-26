@@ -1,0 +1,34 @@
+---
+- hosts: nxos
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+    - name: Merge given VLAN attributes with device configuration
+      nxos_vlans:
+        config:
+          - vlan_id: 145
+            name: test2-vlan
+          - vlan_id: 125
+            state: active
+        state: merged
+    - name: Override vlan attributes
+      nxos_vlans:
+        config:
+          - vlan_id: 245
+            name: test3-vlan
+          - vlan_id: 225
+            state: active
+        state: overridden
+
+
+
+
+#- name: TURN ON HTTPAPI CONNECTION PLUGINS
+#  hosts: eos
+#  gather_facts: false
+#  tasks:
+#    - name: TURN ON EAPI
+#      vars:
+#        ansible_connection: network_cli
+#      eos_eapi:

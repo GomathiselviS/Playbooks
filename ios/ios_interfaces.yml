@@ -1,0 +1,31 @@
+---
+- hosts: ios
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+  - name: Merge given VLAN attributes with device configuration
+    ios_l3_interfaces:
+      config:
+        - name: GigabitEthernet0/1
+          ipv6:
+            - address: 2001:db8::1/64
+      state: merged
+
+#    - name: Override given VLAN attributes with device configuration
+#      eos_interfaces:
+#        config:
+#          - name: loopback20
+#            description: "Virtualinterface20"
+#        state: overridden
+
+
+
+#- name: TURN ON HTTPAPI CONNECTION PLUGINS
+#  hosts: eos
+#  gather_facts: false
+#  tasks:
+#    - name: TURN ON EAPI
+#      vars:
+#        ansible_connection: network_cli
+#      eos_eapi:

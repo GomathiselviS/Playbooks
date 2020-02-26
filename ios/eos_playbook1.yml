@@ -1,0 +1,16 @@
+---
+- hosts: ios
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+    - name: Merge given VLAN attributes with device configuration
+      ios_vlans:
+        config:
+          - name: Vlan_500
+            vlan_id: 500
+            mtu: 700
+            state: active
+            shutdown: disabled
+        state: replaced
+

@@ -1,0 +1,30 @@
+---
+- hosts: ios
+  gather_facts: false
+  connection: network_cli
+
+  vars:
+    ansible_network_os: ios
+
+  tasks:
+  - name: "set login banner"
+    ios_banner:
+      banner: login
+      text: |
+        *********************************************
+        *                                           *
+        *    Actual banner configured on device     *
+        *                                           *
+        *********************************************
+      state: present
+
+  - name: "set exec banner"
+    ios_banner:
+      banner: exec
+      text: |
+        *********************************************
+        *                                           *
+        *    Actual banner configured on device     *
+        *                                           *
+        *********************************************
+      state: present

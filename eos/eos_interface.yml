@@ -18,6 +18,7 @@
           - name: Ethernet2
             description: "Ansible"
         state: merged
+      become: yes
 
 
 

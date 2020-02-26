@@ -1,0 +1,57 @@
+---
+- hosts: eos
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+#  - name: Merge given VLAN attributes with device configuration
+#    eos_l3_interfaces:
+#      config:
+#        - name : Ethernet1
+#          ipv4:
+#            - address: 113.1.1.1/24
+#      state: replaced
+
+    - name: given VLAN attributes with device configuration
+      eos_vlans:
+        config:
+          - name: desktops
+            vlan_id: 20
+          - name: servers
+            vlan_id: 30
+          - name: printers
+            vlan_id: 40
+          - name: DMZ
+            vlan_id: 50
+          - name: blah
+            vlan_id: 80
+          - name: artisanal_vlan
+            vlan_id: 100
+        state: merged
+      become: yes
+      tags: Merge
+
+    - name: given VLAN attributes with device configuration
+      eos_vlans:
+        config:
+          - name: desktops
+            vlan_id: 20
+          - name: DMZ
+            vlan_id: 60
+          - name: sean
+            vlan_id: 80
+        state: overridden
+      become: yes
+      tags: replaced
+
+
+
+
+#- name: TURN ON HTTPAPI CONNECTION PLUGINS
+#  hosts: eos
+#  gather_facts: false
+#  tasks:
+#    - name: TURN ON EAPI
+#      vars:
+#        ansible_connection: network_cli
+#      eos_eapi:

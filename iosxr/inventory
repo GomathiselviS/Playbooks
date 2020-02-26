@@ -1,0 +1,2 @@
+[iosxr]
+10.8.38.70 ansible_ssh_user=admin ansible_ssh_pass=admin ansible_network_os=iosxr ansible_connection=network_cli ansible_become=yes ansible_become_method=enable ansible_become_pass=cisco

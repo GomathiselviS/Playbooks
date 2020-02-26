@@ -1,0 +1,9 @@
+---
+- hosts: junos
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+    - name: Gather
+      junos_facts:
+        gather_subset: all

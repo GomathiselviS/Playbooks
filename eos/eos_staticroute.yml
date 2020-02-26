@@ -41,13 +41,17 @@
                     - interface: "Null0"
                       description: "testroute1"
                       admin_distance: 90
+                    - forward_router_address: "4312:100::1"
+                      interface: "Management1"
 
+    become: yes
     tags:
       - "Merge"
 
   - name: Del
     eos_static_routes:
       state: "deleted"
+    become: yes
     tags:
       "deletedall"
 
@@ -56,6 +60,7 @@
       config:
         - vrf: testvrf
       state: "deleted"
+    become: yes
     tags:
       "deletevrf"
 
@@ -65,6 +70,7 @@
       config:
         - address_families:
       state: "deleted"
+    become: yes
     tags:
       "deletedefaultvrf"
 
@@ -75,6 +81,7 @@
           address_families:
           - afi: "ipv4"
       state: "deleted"
+    become: yes
     tags:
       "deleteafi"
 
@@ -86,6 +93,7 @@
             routes:
               - dest: 10.2.2.0/24
       state: "deleted"
+    become: yes
     tags:
       "deleteroute"
 
@@ -104,6 +112,7 @@
                   next_hops:
                     - interface: 'Nexthop-Group testgrp'
       state: "deleted"
+    become: yes
     tags:
       "deletenexthop"
 
@@ -121,26 +130,31 @@
               - interface: Loopback1
                 admin_distance: 200
       state: "overridden"
+    become: yes
     tags:
       "override"
 
   - name: Replace nexthop
     eos_static_routes:
       config:
-        - address_families:
-            - afi: ipv4
+        - vrf: testvrf
+          address_families:
+            - afi: ipv6
               routes:
-                - dest: 10.2.2.0/24
+                - dest: 2222:6::/64
                   next_hops:
-                    - interface: 12.2.3.1
-                      admin_distance: 9
+                    - admin_distance: 55
+                      interface: "Ethernet1"
+
       state: "replaced"
+    become: yes
     tags:
       "replaced"
 
   - name: Gather
     eos_static_routes:
       state: gathered
+    become: yes
     tags:
       - gathered
 

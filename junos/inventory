@@ -1,0 +1,2 @@
+[junos]
+10.8.38.38 ansible_network_os=junos ansible_user=ansible ansible_ssh_pass=@nsible ansible_become=true ansible_become_method=enable ansible_become_pass=admin

@@ -1,0 +1,25 @@
+---
+- hosts: nxos
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+    - name: Run Cisco NXOS command
+      nxos_command:
+        commands: show ip int br
+      when: ansible_network_os == 'nxos'
+      register: result
+
+    - name: Set hostname
+      cli_config:
+        config: hostname test2-switch
+
+    - name: Get hostname
+      nxos_command:
+        commands: show running-config | grep hostname
+      register: result
+
+    - name: Display result
+      debug:
+        var: result.stdout
+

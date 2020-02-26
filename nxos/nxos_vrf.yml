@@ -1,0 +1,16 @@
+---
+- hosts: nxos
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+  - nxos_vrf:
+      aggregate:
+      - { name: "secondvrf    " }
+      state: present
+    tags: first
+  - nxos_vrf:
+      aggregate:
+        - {}
+      purge: true
+    tags: second

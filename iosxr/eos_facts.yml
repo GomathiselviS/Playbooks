@@ -1,10 +1,10 @@
 ---
-- hosts: eos
+- hosts: iosxr
   connection: network_cli
   gather_facts: false
   tasks:
-  # - import_role:
-  #    name: /home/gosriniv/workspace/MODULES/acls
+  - import_role:
+      name: /home/gosriniv/workspace/MODULES/acls
       
   - name: Facts
     eos_facts: 

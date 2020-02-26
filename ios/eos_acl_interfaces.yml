@@ -1,0 +1,172 @@
+---
+- hosts: ios
+  connection: network_cli
+  gather_facts: false
+  tasks:
+      
+  - name: "Merge module attributes of given access-groups"
+    eos_acl_interfaces:
+      config:
+        - name: GigabitEthernet0/1
+          access_groups:
+            - afi: ipv4
+              acls:
+                - name: aclv41
+                  direction: in
+            - afi: ipv6
+              acls:
+                - name: aclv6new3
+                  direction: out
+        - name: GigabitEthernet0/0
+          access_groups:
+            - afi: ipv6
+              acls:
+                - name: aclv6new2
+                  direction: in
+      state: merged
+    become: yes  
+    tags:
+      - Merge
+
+  - name: "Merge module attributes of given access-groups"
+    eos_acl_interfaces:
+      config:
+        - name: GigabitEthernet0/1
+          access_groups:
+            - afi: ipv4
+              acls:
+                - name: aclv41
+                  direction: in
+        - name: GigabitEthernet0/0
+          access_groups:
+            - afi: ipv6
+              acls:
+                - name: aclv6new2
+                  direction: in
+      state: merged
+    become: yes
+    tags:
+      - Merge2
+
+
+  - name: "Delete int"
+    eos_acl_interfaces:
+      config:
+        - name: GigabitEthernet0/1
+      state: deleted
+    become: yes
+    tags:
+      - deletedint
+
+  - name: "Delete int"
+    eos_acl_interfaces:
+      config:
+        - name: GigabitEthernet0/1
+          access_groups:
+            - afi: "ipv4"
+        - name: GigabitEthernet0/0
+          access_groups:
+            - afi: "ipv6"
+      state: deleted
+    become: yes
+    tags:
+      - deletedafi
+
+  - name: "Delete int"
+    eos_acl_interfaces:
+      config:
+        - name: GigabitEthernet0/1
+          access_groups:
+            - afi: ipv6
+              acls:
+                - name: aclv6new3
+                  direction: out
+        - name: GigabitEthernet0/0
+          access_groups:
+            - afi: ipv6
+              acls:
+                - name: aclv6new2
+                  direction: in
+      state: deleted
+    become: yes
+    tags:
+      - deletedacl
+
+  - name: "override module attributes of given access-groups"
+    eos_acl_interfaces:
+      config:
+        - name: GigabitEthernet0/2
+          access_groups:
+            - afi: ipv6
+              acls:
+                - name: acloverridev6
+                  direction: out
+        - name: GigabitEthernet0/3
+          access_groups:
+            - afi: ipv6
+              acls:
+                - name: acloverridev6
+                  direction: in
+      state: overridden
+    become: yes
+    tags:
+      - overridden
+ 
+
+  - name: "Replace module attributes of given access-groups"
+    eos_acl_interfaces:
+      config:
+        - name: GigabitEthernet0/1
+          access_groups:
+            - afi: ipv4
+              acls:
+                - name: aclreplace1
+                  direction: out
+        - name: GigabitEthernet0/3
+          access_groups:
+            - afi: ipv6
+              acls:
+                - name: aclreplace2
+                  direction: in
+      state: replaced
+    become: yes
+    tags:
+      - replaced
+
+  - name: Gather
+    eos_acl_interfaces:
+      state: gathered
+    become: yes
+    tags:
+      - gathered
+
+  - name: Render provided configuration
+    eos_acl_interfaces:
+      config:
+        - name: GigabitEthernet0/1
+          access_groups:
+            - afi: ipv4
+              acls:
+                - name: aclv41
+                  direction: in
+            - afi: ipv6
+              acls:
+                - name: aclv6new3
+                  direction: out
+        - name: GigabitEthernet0/0
+          access_groups:
+            - afi: ipv6
+              acls:
+                - name: aclv6new2
+                  direction: in
+      state: rendered
+    tags:
+      - rendered
+
+  - name: parse configs
+    eos_acl_interfaces:
+      running_config: "{{ lookup('file', './parsed_acl_interfaces.cfg') }}"
+      state: parsed
+    tags:
+      - parsed
+

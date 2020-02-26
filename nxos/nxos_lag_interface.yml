@@ -1,0 +1,33 @@
+---
+- hosts: nxos
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+  - name: Merge given VLAN attributes with device configuration
+    nxos_lag_interfaces:
+      config:
+        - name: port-channel7
+          members:
+            - member: Ethernet1/11
+              mode: yes
+      state: merged
+
+
+#    - name: Override given VLAN attributes with device configuration
+#      eos_interfaces:
+#        config:
+#          - name: loopback20
+#            description: "Virtualinterface20"
+#        state: overridden
+
+
+
+#- name: TURN ON HTTPAPI CONNECTION PLUGINS
+#  hosts: eos
+#  gather_facts: false
+#  tasks:
+#    - name: TURN ON EAPI
+#      vars:
+#        ansible_connection: network_cli
+#      eos_eapi:

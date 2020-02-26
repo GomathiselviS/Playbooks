@@ -1,0 +1,211 @@
+---
+- hosts: eos
+  connection: network_cli
+  gather_facts: false
+  tasks:
+
+  - name: Merge provided configuration with device configuration
+    eos_acls:
+      config:
+        - afi: "ipv4"
+          acls:
+           - name: acl01
+             aces:
+               - sequence: 35
+                 log: true
+                 ttl:
+                  lt: 100
+                 source:
+                  any: true
+      state: merged
+    become: yes
+    tags:
+      - MergeUpdate
+
+
+
+  - name: Merge provided configuration with device configuration
+    eos_acls:
+      config:
+        - afi: "ipv4"
+          acls:
+           - name: acl01
+             aces:
+               - sequence: 35
+                 grant: "deny"
+                 protocol: "ospf"
+                 source:
+                   subnet_address: 20.0.0.0/8
+                 destination:
+                   any: true
+               - remark: "Run by ansible"
+               - grant: "permit"
+                 protocol: "6"
+                 source:
+                  any: true
+                 destination:
+                  any: true
+           - name: acl04
+             aces:
+               - grant: "permit"
+                 source:
+                   any: true
+                   port_protocol:
+                    eq: "25"
+                 destination:
+                   any: true
+                   port_protocol:
+                    eq: "www"
+                 protocol: "tcp"
+                 ttl:
+                   eq: "55"
+        - afi: "ipv6"
+          acls:
+            - name: aclv6
+              standard: true
+              aces:
+                - grant: "permit"
+                  log: "true"
+                  source:
+                    any: true
+      state: merged
+    become: yes
+    tags:
+      - Merge
+
+  - name: Gather
+    eos_acls:
+      state: gathered
+    become: yes
+    tags:
+      - gathered
+
+  - name: Render provided configuration
+    eos_acls:
+      config:
+        - afi: "ipv4"
+          acls:
+           - name: acl01
+             aces:
+               - sequence: 35
+                 grant: "deny"
+                 protocol: "ospf"
+                 source:
+                   subnet_address: 20.0.0.0/8
+                 destination:
+                   any: true
+               - remark: "Run by ansible"
+               - grant: "permit"
+                 protocol: "6"
+                 source:
+                  any: true
+                 destination:
+                  any: true
+      state: rendered
+    tags:
+      - rendered
+
+  - name: parse configs
+    eos_acls:
+      running_config: "{{ lookup('file', './parsed_acls.cfg') }}"
+      state: parsed
+    tags:
+      - parsed
+
+  - name: Delete provided configuration with device configuration
+    eos_acls:
+      config:
+        - afi: "ipv4"
+          acls:
+           - name: acl01
+             aces:
+               - sequence: 35
+               - remark: "Run by ansible"
+               - grant: "permit"
+                 protocol: "6"
+                 source:
+                  any: true
+                 destination:
+                  any: true
+      state: deleted
+    become: yes
+    tags:
+      - deletedaces
+
+  - name: Delete provided configuration with device configuration
+    eos_acls:
+      config:
+        - afi: "ipv4"
+          acls:
+           - name: acl01
+           - name: acl04
+      state: deleted
+    become: yes
+    tags:
+      - deletedacls
+
+  - name: Delete provided configuration with device configuration
+    eos_acls:
+      config:
+        - afi: "ipv6"
+      state: deleted
+    become: yes
+    tags:
+      - deletedafi
+
+  - name: Merge provided configuration with device configuration
+    eos_acls:
+      config:
+        - afi: "ipv4"
+          acls:
+           - name: acl03
+             aces:
+               - sequence: 34
+                 grant: "permit"
+                 protocol: "88"
+                 source:
+                   subnet_address: 20.0.0.0/8
+                 destination:
+                   any: true
+    become: yes
+    tags:
+      - test
+
+  - name: Replace provided configuration with device configuration
+    eos_acls:
+      config:
+        - afi: "ipv4"
+          acls:
+           - name: acl01
+             aces:
+               - sequence: 11
+                 grant: "permit"
+                 protocol: "tcp"
+                 source:
+                   subnet_address: 20.0.0.0/8
+                 destination:
+                   any: true
+      state: replaced
+    become: yes
+    tags:
+      - replaced
+
+  - name: Override provided configuration 
+    eos_acls:
+      config:
+        - afi: "ipv4"
+          acls:
+           - name: acl01
+             aces:
+               - sequence: 25
+                 grant: "permit"
+                 protocol: "icmp"
+                 source:
+                   subnet_address: 20.0.0.0/8
+                 destination:
+                   any: true
+      state: overridden
+    become: yes
+    tags:
+      - overridden
+

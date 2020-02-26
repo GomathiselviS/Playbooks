@@ -1,0 +1,16 @@
+---
+- hosts: iosxr
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+    - name: Capture Commands from Device
+      ios_command:
+        commands:
+          - show interface
+      register: result
+
+    - name: Display result
+      debug:
+        var: result.stdout_lines
+

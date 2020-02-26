@@ -1,0 +1,30 @@
+---
+- hosts: nxos
+  gather_facts: false
+  connection: network_cli
+
+  tasks:
+  - nxos_interface:
+      aggregate:
+      - { name: PortChannel500, mtu: 1500, description: First-PortChannel }
+      state: present
+    tags: first
+  - nxos_interface:
+      aggregate:
+      - { name: PortChannel500, mtu: 1500, description: First-PortChannel }
+      - { name: PortChannel501, mtu: 1500, description: Second-PortChannel }
+      state: present
+    tags: second
+  - nxos_interfaces:
+      config:
+        - name: PortChannel500
+          mtu: 1500
+          description: First-PortChannel
+        - name: PortChannel501
+          mtu: 1500
+          description: Second-PortChannel
+        - name: PortChannle502
+          mtu: 1500
+          description: Third-PortChannel
+      state: merged
+    tags: third

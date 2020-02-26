@@ -3,14 +3,14 @@
   connection: network_cli
   gather_facts: false
   tasks:
-  # - import_role:
-  #    name: /home/gosriniv/workspace/MODULES/acls
+  - import_role:
+      name: /home/gosriniv/workspace/MODULES/acl_interfaces
       
   - name: Facts
     eos_facts: 
       gather_subset:
         - min 
-      gather_network_resources: acls
+      gather_network_resources: acl_interfaces
     become: yes  
     tags:
       - facts
