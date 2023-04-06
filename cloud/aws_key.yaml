@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: create a multi region key
+      amazon.aws.kms_key:
+        alias: 'aws-test'
+        tags:
+          Hello: World
+        state: absent
+        enabled: yes
+        multi_region: True
+        enable_key_rotation: no
+      register: key
