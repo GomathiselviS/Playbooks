@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Create backup vault
+      amazon.aws.backup_vault:
+        backup_vault_name: "vault1"
+        backup_vault_tags:
+          Name: "ansibe cloud"
