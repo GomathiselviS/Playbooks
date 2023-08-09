@@ -9,9 +9,9 @@
         name: "DO467 CH5 Demo E-mail Notification"
         notification_type: email
         notification_configuration:
-          sender: system@controller.lab.example.com 
+          sender: gomathiselvi@gmail.com 
           recipients:
-            - aap-admins@lab.example.com 
+            - gosriniv@redhat.com 
           host: localhost
           port: 25
           use_ssl: no
@@ -19,6 +19,6 @@
         organization: Red Hat Training
         controller_username: admin
         controller_password: redhat
-        controller_host: https://controller.lab.example.com
+        controller_host: https://google.com
         validate_certs: false
         state: present
