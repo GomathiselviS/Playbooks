@@ -5,7 +5,7 @@
   tasks:
 
     - name: Create Notification Template
-      ansible.controller.notification_template:
+      awx.awx.notification_template:
         name: "DO467 CH5 Demo E-mail Notification"
         notification_type: email
         notification_configuration:
